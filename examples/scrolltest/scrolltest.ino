@@ -1,5 +1,6 @@
-// Adafruit_NeoMatrix example for single NeoPixel Shield.
-// Scrolls 'Howdy' across the matrix in a portrait (vertical) orientation.
+// Adafruit_NeoMatrix example for non-blocking scrolling on a
+// single NeoPixel Shield.Scrolls 'LOL' across the matrix in a 
+// portrait (vertical) orientation with a non-blocking method.
 
 #include <Adafruit_GFX.h>
 #include <Adafruit_NeoMatrix.h>
@@ -41,27 +42,24 @@ Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(5, 8, PIN,
   NEO_GRB            + NEO_KHZ800);
 
 
+  char message[] = "LOL";
+
 void setup() {
   matrix.begin();
-  matrix.setTextWrap(false);
-  matrix.setBrightness(40);
-  matrix.setTextColor(colors[0]);
+ 
+  // Set up the scrolling, (period [ms], scroll length, scrolling message)
+  matrix.setScroll(100, 25, message);
+  
+  // Start the scrolling
+  matrix.startScroll();
+ 
 }
 
-int x    = matrix.width();
-int pass = 0;
 
 void loop() {
-  matrix.fillScreen(0);
-  matrix.setCursor(x, 0);
-  matrix.print(F("Howdy"));
-  if(--x < -36) {
-    x = matrix.width();
-    if(++pass >= 3) pass = 0;
-    matrix.setTextColor(colors[pass]);
-  }
-  matrix.show();
-  delay(100);
+  
+  // The scroll method. Only runs based on the period set by setScroll()
+  matrix.scroll();
   
   
 }

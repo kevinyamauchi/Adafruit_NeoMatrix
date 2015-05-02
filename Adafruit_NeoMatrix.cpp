@@ -38,6 +38,8 @@
  #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
 #endif
 
+#define SCROLL_STRING F("LOL")
+
 // Constructor for single matrix:
 Adafruit_NeoMatrix::Adafruit_NeoMatrix(int w, int h, uint8_t pin,
   uint8_t matrixType, uint8_t ledType) : Adafruit_GFX(w, h),
@@ -179,4 +181,94 @@ void Adafruit_NeoMatrix::fillScreen(uint16_t color) {
 
 void Adafruit_NeoMatrix::setRemapFunction(uint16_t (*fn)(uint16_t, uint16_t)) {
   remapFn = fn;
+}
+
+
+void Adafruit_NeoMatrix::setScroll(uint32_t interval, uint8_t scrollLength, 
+  char *NewScrollMessage){
+
+  // Save the scrolling interval and length
+  ScrollInterval = interval;
+  ScrollLength = scrollLength;
+  ScrollMessage = NewScrollMessage;
+
+  // Allow the scrolling to be started
+  ScrollSet = true;
+
+  // Initialize the text settings
+  setTextWrap(false);
+  setBrightness(20);
+  setTextColor(Color(255, 0, 0));
+  ScrollCursorPosition = matrixWidth;
+
+}
+
+void Adafruit_NeoMatrix::startScroll(void) {
+
+  if(ScrollSet) {
+    // Set the next time to update the screen [ms]
+    PreviousScrollTime = millis();
+
+    // Activate scrolling...
+    Scrolling = true;
+
+    // Display the message
+    fillScreen(0);
+    setCursor(ScrollCursorPosition, 0);
+    //print(ScrollMessage);
+
+    print(SCROLL_STRING);
+    show();
+
+  }
+}
+
+void Adafruit_NeoMatrix::pauseScroll(void) {
+
+  Scrolling = false;
+  fillScreen(0);
+  show();
+
+
+
+} 
+
+void Adafruit_NeoMatrix::stopScroll(void) {
+
+  Scrolling = false;
+  fillScreen(0);
+  show();
+
+  // Reset the scroll position
+  ScrollCursorPosition = matrixWidth;
+
+
+} 
+
+void Adafruit_NeoMatrix::scroll(void) {
+
+ // uint16_t CurrentTime = millis();
+
+  if(Scrolling && ((millis() - PreviousScrollTime) > ScrollInterval)) {
+
+     PreviousScrollTime += ScrollInterval;
+
+     fillScreen(0);
+     setCursor(--ScrollCursorPosition, 0);
+     //print(ScrollMessage);
+     print(SCROLL_STRING);
+     
+     if(ScrollCursorPosition < (-1 * ScrollLength))
+     {
+        
+        ScrollCursorPosition = matrixWidth;
+    
+      }
+      
+      show();
+
+      //delay(100);
+
+  }
+
 }

@@ -81,7 +81,14 @@ class Adafruit_NeoMatrix : public Adafruit_GFX, public Adafruit_NeoPixel {
   void
     drawPixel(int16_t x, int16_t y, uint16_t color),
     fillScreen(uint16_t color),
-    setRemapFunction(uint16_t (*fn)(uint16_t, uint16_t));
+    setRemapFunction(uint16_t (*fn)(uint16_t, uint16_t)),
+    setScroll(uint32_t interval, uint8_t scrollLength, char *NewScrollMessage),
+    startScroll(void),
+    pauseScroll(void),
+    stopScroll(void),
+    scroll(void);
+    
+
   static uint16_t
     Color(uint8_t r, uint8_t g, uint8_t b);
 
@@ -93,6 +100,24 @@ class Adafruit_NeoMatrix : public Adafruit_GFX, public Adafruit_NeoPixel {
     matrixWidth, matrixHeight, tilesX, tilesY;
   uint16_t
     (*remapFn)(uint16_t x, uint16_t y);
+
+  // Scrolling machine timing variables
+  uint32_t ScrollInterval;
+  uint32_t PreviousScrollTime;
+
+  // Length of the scrolling message
+  uint8_t ScrollLength;
+
+  // The message
+  char *ScrollMessage;
+
+  // Scrolling machine cursor position
+  int ScrollCursorPosition;
+  
+  // Flag variables for the scrolling machine state
+  bool Scrolling = false;
+  bool ScrollSet = false;
+
 
 };
 
