@@ -184,6 +184,7 @@ void Adafruit_NeoMatrix::setRemapFunction(uint16_t (*fn)(uint16_t, uint16_t)) {
 }
 
 
+// Method to set up the scroll. interval is in ms
 void Adafruit_NeoMatrix::setScroll(uint32_t interval, uint8_t scrollLength, 
   char *NewScrollMessage){
 
@@ -203,6 +204,7 @@ void Adafruit_NeoMatrix::setScroll(uint32_t interval, uint8_t scrollLength,
 
 }
 
+// Start tje scrp;;omg
 void Adafruit_NeoMatrix::startScroll(void) {
 
   if(ScrollSet) {
@@ -223,6 +225,8 @@ void Adafruit_NeoMatrix::startScroll(void) {
   }
 }
 
+// Pause the scrolling. Will resume in current cursor position when
+// the scrolling is resumed
 void Adafruit_NeoMatrix::pauseScroll(void) {
 
   Scrolling = false;
@@ -233,6 +237,7 @@ void Adafruit_NeoMatrix::pauseScroll(void) {
 
 } 
 
+// Stop scrolling. Resets the cursor position
 void Adafruit_NeoMatrix::stopScroll(void) {
 
   Scrolling = false;
@@ -245,6 +250,8 @@ void Adafruit_NeoMatrix::stopScroll(void) {
 
 } 
 
+// Non-blocking scrolling. Runs opportunistically based on the timing
+// requirements set in setScroll()
 void Adafruit_NeoMatrix::scroll(void) {
 
  // uint16_t CurrentTime = millis();
